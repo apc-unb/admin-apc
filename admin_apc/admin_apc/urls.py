@@ -20,5 +20,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='url_index'),
-    path('students/', views.students, name='url_students')
+    path('students/', views.students, name='url_students'),
+    path('create_student/', views.create_student, name='create_student'),
+    path('update_student/', views.update_student, name='update_student'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
