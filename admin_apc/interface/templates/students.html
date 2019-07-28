@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{%static  'css/students.css'%}">
-    <title>CRUD Estudante</title>
+    <link rel="stylesheet" href="{%static  'css/center-hide.css'%}">
+    <title>CRUD Aluno</title>
 </head>
 <body>
     <button onclick="show('form')">Cadastrar Aluno</button>
@@ -67,7 +67,7 @@
             {% for type, grade in student.grades.items %}
             {{ type }}: <br>
                 {% for x in grade %}
-                <input type="text" name="{{ type }}{{forloop.counter}}" value="{{ x }}">
+                <input type="number" step="0.01" min="0" name="{{ type }}{{forloop.counter}}" value="{{ x }}">
                 <br>
                 {% endfor %}
                 <br>
@@ -81,5 +81,5 @@
     {% endfor %}
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="{%static 'js/students.js' %}"></script>
+<script src="{%static 'js/show.js' %}"></script>
 </html>

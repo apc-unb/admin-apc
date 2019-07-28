@@ -23,4 +23,8 @@ urlpatterns = [
     path('students/', views.students, name='url_students'),
     path('create_student/', views.create_student, name='create_student'),
     path('update_student/', views.update_student, name='update_student'),
+    path('classes/', views.classes, name='url_classes'),
+    path('create_class/', views.create_class, name='create_class'),
+    path('update_class/', views.update_class, name='update_class'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

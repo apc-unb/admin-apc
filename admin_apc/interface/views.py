@@ -7,11 +7,10 @@ def index(request):
     return render(request, 'index.html', {})
 
 def students(request):
-    
+    data = {}
     # requests to API
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/students')
-    data = {}
     data["students"] = r.json()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()
@@ -19,36 +18,18 @@ def students(request):
     return render(request, 'students.html', data)
 
 def create_student(request):
-    # requests to API
-    s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/students')
-    data = {}
-    data["students"] = r.json()
-    r = s.get('http://127.0.0.1:8080/classes')
-    data["classes"] = r.json()
-
-    # create student
     if request.method == "POST":
         new_student = {}
         new_student["firstname"] = request.POST.get("firstname")
         new_student["lastname"] = request.POST.get("lastname")
         new_student["matricula"] = request.POST.get("matricula")
         new_student["ClassID"] = request.POST.get("ClassID")
-        requests.post('http://127.0.0.1:8080/students', "[" + json.dumps(new_student) + "]")
+        requests.post('http://127.0.0.1:8080/students', data="[" + json.dumps(new_student) + "]")
     
     
     return students(request)
 
 def update_student(request):
-    # requests to API
-    s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/students')
-    data = {}
-    data["students"] = r.json()
-    r = s.get('http://127.0.0.1:8080/classes')
-    data["classes"] = r.json()
-
-    # update student
     if request.method == 'POST':
         update_student = {}
         update_student["ID"] = request.POST.get("ID")
@@ -90,7 +71,53 @@ def update_student(request):
                     float(request.POST.get("lists3")),
                 ]})
             
-            requests.put('http://127.0.0.1:8080/students', json.dumps(update_student))
+            requests.put('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")
 
     return students(request)
 
+def classes(request):
+    data = {}
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
+    return render(request, 'classes.html', data)
+
+def create_class(request):
+    if request.method == 'POST':
+        new_class = {}
+        new_class["professorfirstname"] = request.POST.get("professorfirstname")
+        new_class["professorlastname"] = request.POST.get("professorlastname")
+        new_class["classname"] = request.POST.get("classname")
+        new_class["address"] = request.POST.get("address")
+        new_class["year"] = int(request.POST.get("year"))
+        new_class["season"] = int(request.POST.get("season"))
+        
+        requests.post('http://127.0.0.1:8080/classes', data="[" + json.dumps(new_class) + "]")
+
+    return classes(request)
+
+def update_class(request):
+    if request.method == 'POST':
+        update_class = {}
+        update_class["ID"] = request.POST.get("ID")
+
+        if(request.POST.get("delete") == "on"):
+            requests.delete('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
+            
+        else:
+            if request.POST.get("professorfirstname") != "":
+                update_class["professorfirstname"] = request.POST.get("professorfirstname")
+            if request.POST.get("professorlastname") != "":
+                update_class["professorlastname"] = request.POST.get("professorlastname")
+            if request.POST.get("classname") != "":
+                update_class["classname"] = request.POST.get("classname")
+            if request.POST.get("address") != "":
+                update_class["address"] = request.POST.get("address")
+            if request.POST.get("year") != "":
+                update_class["year"] = int(request.POST.get("year"))
+            if request.POST.get("season") != "":
+                update_class["season"] = int(request.POST.get("season"))
+
+            requests.put('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
+
+    return classes(request)
