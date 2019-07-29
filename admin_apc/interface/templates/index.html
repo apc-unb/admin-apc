@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,16 @@
     <title>Admins</title>
 </head>
 <body>
-    
+    <form action="{% url 'url_students' %}">
+        <input type="submit" value="CRUD Aluno">
+    </form>
+    <br>
+    <form action="{% url 'url_classes' %}">
+        <input type="submit" value="CRUD Turma">
+    </form>
+    <br>
+    <form action="{% url 'url_news' %}">
+        <input type="submit" value="CRUD Notícia">
+    </form>
 </body>
 </html>
