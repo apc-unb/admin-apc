@@ -103,7 +103,7 @@ def update_class(request):
 
         if(request.POST.get("delete") == "on"):
             requests.delete('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
-            
+
         else:
             if request.POST.get("professorfirstname") != "":
                 update_class["professorfirstname"] = request.POST.get("professorfirstname")
@@ -121,3 +121,44 @@ def update_class(request):
             requests.put('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
 
     return classes(request)
+
+def news(request):
+    data = {}
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/news')
+    data["news"] = r.json()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
+    return render(request, 'news.html', data)
+
+def create_new(request):
+    if request.method == 'POST':
+        new_new = {}
+        new_new["classid"] = request.POST.get("ClassID")
+        new_new["title"] = request.POST.get("title")
+        new_new["description"] = request.POST.get("description")
+        new_new["tags"] = str(request.POST.get("tags")).split("#")
+        
+        requests.post('http://127.0.0.1:8080/news', data="[" + json.dumps(new_new) + "]")
+    return news(request)
+
+def update_new(request):
+    if request.method == 'POST':
+        update_new = {}
+        update_new["ID"] = request.POST.get("ID")
+
+        if(request.POST.get("delete") == "on"):
+            requests.delete('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")
+        
+        else:
+            if request.POST.get("ClassID") != "":
+                update_new["classid"] = request.POST.get("ClassID")
+            if request.POST.get("title") != "":
+                update_new["title"] = request.POST.get("title")
+            if request.POST.get("description") != "":
+                update_new["description"] = request.POST.get("description")
+            if request.POST.get("tags") != "":
+                update_new["tags"] = str(request.POST.get("tags")).split("#")
+            requests.put('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")
+
+    return news(request)
