@@ -31,12 +31,13 @@ def create_student(request):
 def update_student(request):
     if request.method == 'POST':
         update_student = {}
-        update_student["StudentID"] = request.POST.get("ID")
-        
+
         if(request.POST.get("delete") == "on"):
+            update_student["ID"] = request.POST.get("ID")
             requests.delete('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")  
         
         else: 
+            update_student["StudentID"] = request.POST.get("ID")
             update_student["ClassID"] = request.POST.get("ClassID")
             if request.POST.get("firstname") != "":
                 update_student["firstname"] = request.POST.get("firstname")
