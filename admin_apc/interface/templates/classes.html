@@ -43,22 +43,22 @@
             {% csrf_token %}
             <input type="hidden" name="ID" value="{{ class.ID }}">
             Professor First name:<br>
-            <input type="text" name="professorfirstname" value="{{ class.professorfirstname }}">
+            <input type="text" name="professorfirstname" placeholder="{{ class.professorfirstname }}">
             <br>
             Professor Last name:<br>
-            <input type="text" name="professorlastname" value="{{ class.professorlastname }}">
+            <input type="text" name="professorlastname" placeholder="{{ class.professorlastname }}">
             <br>
             Adress:<br>
-            <input type="text" name="address" value="{{ class.address }}">
+            <input type="text" name="address" placeholder="{{ class.address }}">
             <br>
             Year:<br>
-            <input type="number" min="2018" name="year" value="{{ class.year }}">
+            <input type="number" min="2018" name="year" placeholder="{{ class.year }}">
             <br>
             Season:<br>
-            <input type="number" min="1" max="2" name="season" value="{{ class.season }}">
+            <input type="number" min="1" max="2" name="season" placeholder="{{ class.season }}">
             <br>
             Class Name:<br>
-            <input type="text" name="classname" value="{{ class.classname }}">
+            <input type="text" name="classname" placeholder="{{ class.classname }}">
             <br>
             <br><br>
             Deseja deletar a turma?<input type="checkbox" name="delete" id="">

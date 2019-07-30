@@ -8,7 +8,6 @@ def index(request):
 
 def students(request):
     data = {}
-    # requests to API
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/students')
     data["students"] = r.json()
@@ -32,7 +31,7 @@ def create_student(request):
 def update_student(request):
     if request.method == 'POST':
         update_student = {}
-        update_student["ID"] = request.POST.get("ID")
+        update_student["StudentID"] = request.POST.get("ID")
         
         if(request.POST.get("delete") == "on"):
             requests.delete('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")  
@@ -70,8 +69,8 @@ def update_student(request):
                     float(request.POST.get("lists2")),
                     float(request.POST.get("lists3")),
                 ]})
-            
-            requests.put('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")
+            print("[" + json.dumps(update_student) + "]")
+            requests.put('http://127.0.0.1:8080/admin/student', data=json.dumps(update_student))
 
     return students(request)
 
@@ -162,3 +161,77 @@ def update_new(request):
             requests.put('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")
 
     return news(request)
+
+def exams(request):
+    data = {}
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
+    r = s.get('http://127.0.0.1:8080/exams')
+    data["exams"] = r.json()
+    r = s.get('http://127.0.0.1:8080/tasks')
+    data["tasks"] = r.json()
+    return render(request, 'exams.html', data)
+
+def create_exam(request):
+    if request.method == 'POST':
+        new_exam = {}
+        new_exam["classid"] = request.POST.get("ClassID")
+        new_exam["title"] = request.POST.get("title")
+        
+        requests.post('http://127.0.0.1:8080/exams', data="[" + json.dumps(new_exam) + "]")
+    return exams(request)
+
+def update_exam(request):
+    if request.method == 'POST':
+        update_exam = {}
+        update_exam["ID"] = request.POST.get("ID")
+
+        if(request.POST.get("delete") == "on"):
+            requests.delete('http://127.0.0.1:8080/exams', data="[" + json.dumps(update_exam) + "]")
+        
+        else:
+            if request.POST.get("ClassID") != "":
+                update_exam["classid"] = request.POST.get("ClassID")
+            if request.POST.get("title") != "":
+                update_exam["title"] = request.POST.get("title")
+            requests.put('http://127.0.0.1:8080/exams', data="[" + json.dumps(update_exam) + "]")
+    
+    return exams(request)
+
+def create_task(request):
+    if request.method == 'POST':
+        new_task = {}
+        new_task["ExamID"] = request.POST.get("ExamID")
+        new_task["title"] = request.POST.get("title")
+        new_task["statement"] = request.POST.get("statement")
+        new_task["score"] = float(request.POST.get("score"))
+        new_task["tags"] = str(request.POST.get("tags")).split("#")
+        
+        requests.post('http://127.0.0.1:8080/tasks', data="[" + json.dumps(new_task) + "]")
+    
+    return exams(request)
+
+def update_task(request):
+    if request.method == 'POST':
+        update_task = {}
+        update_task["ID"] = request.POST.get("ID")
+
+        if(request.POST.get("delete") == "on"):
+            requests.delete('http://127.0.0.1:8080/tasks', data="[" + json.dumps(update_task) + "]")
+        
+        else:
+            if request.POST.get("ExamID") != "":
+                update_task["ExamID"] = request.POST.get("ExamID")
+            if request.POST.get("title") != "":
+                update_task["title"] = request.POST.get("title")
+            if request.POST.get("statement") != "":
+                update_task["statement"] = request.POST.get("statement")
+            if request.POST.get("score") != "":
+                update_task["score"] = float(request.POST.get("score"))
+            if request.POST.get("tags") != "":
+                update_task["tags"] = str(request.POST.get("tags")).split("#")
+
+            requests.put('http://127.0.0.1:8080/tasks', data="[" + json.dumps(update_task) + "]")
+
+    return exams(request)

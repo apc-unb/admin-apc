@@ -19,7 +19,7 @@
             Description: <br>
             <textarea name="description" cols="40" rows="5"></textarea>
             <br>
-            Tags: (separadas por vírgula) <br>
+            Tags: (separadas por hashtag) <br>
             <textarea name="tags" cols="40" rows="5" placeholder="encerramento#calor#quente#frio"></textarea>
             <br>
             <select name="ClassID">
@@ -39,10 +39,10 @@
             {% csrf_token %}
             <input type="hidden" name="ID" value="{{ new.ID }}">
             Title:<br>
-            <input type="text" name="title" value="{{ new.title }}">
+            <input type="text" name="title" placeholder="{{ new.title }}">
             <br>
             Description:<br>
-            <textarea name="description" cols="40" rows="5" >{{ new.description }}</textarea>
+            <textarea name="description" cols="40" rows="5" placeholder="{{ new.description }}"></textarea>
             <br>
             Turma:<br>
             <select name="ClassID">
@@ -56,7 +56,7 @@
             </select>
             <br>
             Tags: <br>
-            <textarea name="tags" cols="40" rows="5">{% for tag in new.tags %}{{ tag }}#{% endfor %}</textarea>
+            <textarea name="tags" cols="40" rows="5" placeholder="{% for tag in new.tags %}{{ tag }}#{% endfor %}"></textarea>
             <br><br>
             Deseja deletar a turma?<input type="checkbox" name="delete" id="">
             <br><br>

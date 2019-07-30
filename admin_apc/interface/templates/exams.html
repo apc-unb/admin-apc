@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{%static  'css/center-hide.css'%}">
+    <title>CRUD Provas</title>
+</head>
+<body>
+    <button onclick="show('form_1')">Cadastrar Prova</button>
+    <div class="center hideform" id="form_1">
+        <form action= "{% url 'create_exam' %}" method="POST">
+            {% csrf_token %}
+            Title: <br>
+            <input type="text" name="title">
+            <br>
+            <select name="ClassID">
+                {% for class in classes %}
+                    <option value="{{class.ID}}">{{ class.classname }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Concluido">
+        </form>
+    </div>
+    <button onclick="show('form_2')">Cadastrar Questão</button>
+    <div class="center hideform" id="form_2">
+        <form action= "{% url 'create_task' %}" method="POST">
+            {% csrf_token %}
+            Title: <br>
+            <input type="text" name="title">
+            <br>
+            Statement: <br>
+            <input type="text" name="statement">
+            <br>
+            Score: <br>
+            <input type="number" step="0.01" min="0" name="score">
+            <br>
+            Tags: (separadas por hashtag) <br>
+            <textarea name="tags" cols="40" rows="5" placeholder="encerramento#calor#quente#frio"></textarea>
+            <br>
+            <select name="ExamID">
+                {% for exam in exams %}
+                    <option value="{{exam.ID}}">{{ exam.title }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Concluido">
+        </form>
+    </div>
+    {% for exam in exams %}
+    <h2>Title: {{ exam.title }}</h2>
+    <button onclick="show('form{{ forloop.counter }}')">Editar</button>
+    <div class="center hideform" id="form{{ forloop.counter }}">
+        <form action="{% url 'update_exam' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ID" value="{{ exam.ID }}">
+            Title:<br>
+            <input type="text" name="title" placeholder="{{ exam.title }}">
+            <br>
+            Turma:<br>
+            <select name="ClassID">
+            {% for class in classes %}
+                {% if exam.ClassID == class.ID %}
+                    <option value="{{class.ID}}" selected>{{ class.classname }}</option>
+                {% else %}
+                    <option value="{{class.ID}}">{{ class.classname }}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+          <br><br>
+            Deseja deletar a prova?<input type="checkbox" name="delete" id="">
+            <br><br>
+            <input type="submit" value="Concluido">
+        </form>
+    </div>
+    <h3>Questões:</h3>
+    {% for task in tasks %}
+    {% if task.ExamID == exam.ID %}
+    <p>{{ task.title }}</p>
+    <button onclick="show('form{{ forloop.counter }}2')">Editar</button>
+    <div class="center hideform" id="form{{ forloop.counter }}2">
+        <form action="{% url 'update_task' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ID" value="{{ task.ID }}">
+            Title:<br>
+            <input type="text" name="title" placeholder="{{ task.title }}">
+            <br>
+            Statement:<br>
+            <input type="text" name="statement" placeholder="{{ task.statement }}">
+            <br>
+            Score: <br>
+            <input type="number" step="0.01" min="0" name="score" placeholder="{{ task.score }}">
+            <br>
+            Tags: <br>
+            <textarea name="tags" cols="40" rows="5" placeholder="{% for tag in task.tags %}{{ tag }}#{% endfor %}"></textarea>
+            <br>  
+            <select name="ExamID">
+                {% for prova in exams %}
+                    {% if prova.ID == task.ExamID %}
+                        <option value="{{prova.ID}}" selected>{{ prova.title }}</option>
+                    {% else %}
+                        <option value="{{prova.ID}}">{{ prova.title }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br><br>
+            Deseja deletar a questão?<input type="checkbox" name="delete" id="">
+            <br><br>
+            <input type="submit" value="Concluido">
+        </form>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="{%static 'js/show.js' %}"></script>
+</html>

@@ -29,5 +29,10 @@ urlpatterns = [
     path('news/', views.news, name='url_news'),
     path('create_new/', views.create_new, name='create_new'),
     path('update_new/', views.update_new, name='update_new'),
+    path('exams/', views.exams, name='url_exams'),
+    path('create_exam/', views.create_exam, name='create_exam'),
+    path('update_exam/', views.update_exam, name='update_exam'),
+    path('create_task/', views.create_task, name='create_task'),
+    path('update_task/', views.update_task, name='update_task'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
