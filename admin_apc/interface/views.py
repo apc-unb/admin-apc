@@ -69,7 +69,6 @@ def update_student(request):
                     float(request.POST.get("lists2")),
                     float(request.POST.get("lists3")),
                 ]})
-            print("[" + json.dumps(update_student) + "]")
             requests.put('http://127.0.0.1:8080/admin/student', data=json.dumps(update_student))
 
     return students(request)
