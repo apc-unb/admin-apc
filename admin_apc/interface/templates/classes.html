@@ -11,6 +11,7 @@
         <div class="container">
             <div id="doc-header" class="doc-header text-center">
                 <h1 class="doc-title"><span aria-hidden="true" class="icon fa fa-users"></span> Turmas</h1>
+                <br>
                 <button onclick="show('form')" class="btn btn-green">Cadastrar Turma</button>
                 <div class="center hideform" id="form">
                     <form action= "{% url 'create_class' %}" method="POST">
@@ -41,13 +42,15 @@
                     <div class="doc-content col-md-9 col-12 order-1">
                         <div class="content-inner">
                             {% for class in classes %}
-                            <section id="{{ class.classname }}" class="doc-section">
+                            <section id="{{ class.ID }}" class="doc-section">
                                 <h2 class="section-title">Turma: {{ class.classname }}</h2>
                                 <div class="section-block">
-                                    <p>Professor: {{ class.professorfirstname }} {{ class.professorlastname }} 
+                                    <p>Professor: {{ class.professorfirstname }} {{ class.professorlastname }}
+                                    <br> Local: {{ class.address }}
+                                    <br> Período: {{ class.year }}/{{ class.season }}
                                     </p>
                                     <button onclick="show('form{{ forloop.counter }}')" class="btn btn-green">Editar</button>
-                                <div class="center hideform" id="form{{ forloop.counter }}">
+                                    <div class="center hideform" id="form{{ forloop.counter }}">
                                     <form action="{% url 'update_class' %}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="ID" value="{{ class.ID }}">
@@ -85,7 +88,7 @@
                        
                                         <nav id="doc-menu" class="nav doc-menu flex-column sticky">
                                             {% for class in classes %}
-                                            <a class="nav-link scrollto" href="#{{ class.classname }}">Turma: {{ class.classname }}</a>
+                                            <a class="nav-link scrollto" href="#{{ class.ID }}">Turma: {{ class.classname }}</a>
                                             {% endfor %}
                                         </nav><!--//doc-menu-->
                                     
