@@ -52,24 +52,20 @@ def update_student(request):
             if request.POST.get("uri") != "":
                 update_student["handles"].update({"uri" : request.POST.get("uri")})
             update_student["grades"] = {}
-            if request.POST.get("exams1") != "":
-                update_student["grades"].update({"exams" : [
-                    float(request.POST.get("exams1")),
-                    float(request.POST.get("exams2")),
-                    float(request.POST.get("exams3")),
-                ]})
-            if request.POST.get("projects1") != "":
-                update_student["grades"].update({"projects" : [
-                    float(request.POST.get("projects1")),
-                    float(request.POST.get("projects2")),
-                    float(request.POST.get("projects3")),
-                ]})
-            if request.POST.get("lists1") != "":
-                update_student["grades"].update({"lists" : [
-                    float(request.POST.get("lists1")),
-                    float(request.POST.get("lists2")),
-                    float(request.POST.get("lists3")),
-                ]})
+            if request.POST.get("exams") != "":
+                l = request.POST.getlist("exams")
+                l = [float(i) for i in l]
+                update_student["grades"].update({"exams" :  l })
+            if request.POST.get("projects") != "":
+                l = request.POST.getlist("projects")
+                l = [float(i) for i in l]
+                update_student["grades"].update({"projects" : l })
+            if request.POST.get("lists") != "":
+                l = request.POST.getlist("lists")
+                l = [float(i) for i in l]
+                update_student["grades"].update({"lists" : l })
+
+            print(update_student)
             requests.put('http://127.0.0.1:8080/admin/student', data=json.dumps(update_student))
 
     return students(request)

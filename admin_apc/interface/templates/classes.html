@@ -1,73 +1,17 @@
-<!DOCTYPE html>
-{% load staticfiles %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{%static  'css/center-hide.css'%}">
-    <title>CRUD Turma</title>
-</head>
-<body>
-    <button onclick="show('form')">Cadastrar Turma</button>
-    <div class="center hideform" id="form">
-        <form action= "{% url 'create_class' %}" method="POST">
-            {% csrf_token %}
-            Professor First Name: <br>
-            <input type="text" name="professorfirstname">
-            <br>
-            Professor Last Name: <br>
-            <input type="text" name="professorlastname">
-            <br>
-            Adress:<br>
-            <input type="text" name="address">
-            <br>
-            Year:<br>
-            <input type="number" min="2018" name="year">
-            <br>
-            Season:<br>
-            <input type="number" min="1" max="2" name="season">
-            <br>
-            Class Name:<br>
-            <input type="text" name="classname">
-            <br>
-            <input type="submit" value="Concluido">
-        </form>
-    </div>
-    {% for class in classes %}
-    <h2>Turma: {{ class.classname }}</h2>
-    <h2>Professor: {{ class.professorfirstname }} {{ class.professorlastname }}</h2> 
-    <button onclick="show('form{{ forloop.counter }}')">Editar</button>
-    <div class="center hideform" id="form{{ forloop.counter }}">
-        <form action="{% url 'update_class' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="ID" value="{{ class.ID }}">
-            Professor First name:<br>
-            <input type="text" name="professorfirstname" placeholder="{{ class.professorfirstname }}">
-            <br>
-            Professor Last name:<br>
-            <input type="text" name="professorlastname" placeholder="{{ class.professorlastname }}">
-            <br>
-            Adress:<br>
-            <input type="text" name="address" placeholder="{{ class.address }}">
-            <br>
-            Year:<br>
-            <input type="number" min="2018" name="year" placeholder="{{ class.year }}">
-            <br>
-            Season:<br>
-            <input type="number" min="1" max="2" name="season" placeholder="{{ class.season }}">
-            <br>
-            Class Name:<br>
-            <input type="text" name="classname" placeholder="{{ class.classname }}">
-            <br>
-            <br><br>
-            Deseja deletar a turma?<input type="checkbox" name="delete" id="">
-            <br><br>
-            <input type="submit" value="Concluido">
-        </form>
-    </div>
-    {% endfor %}
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="{%static 'js/show.js' %}"></script>
-</html>
+{% extends 'base.html' %}
+{% block header %}
+    <title>CRUD ALUNO</title>
+{% endblock %}
+{% block content %}
+<li class="breadcrumb-item active">Turmas</li>
+</ol>
+</div><!--//container-->
+</header><!--//header-->
+<div class="doc-wrapper">
+        <div class="container">
+            <div id="doc-header" class="doc-header text-center">
+                <h1 class="doc-title"><span aria-hidden="true" class="icon fa fa-users"></span> Turmas</h1>
+            </div><!--//doc-header-->
+        </div><!--//container-->
+    </div><!--//doc-wrapper-->
+{% endblock %}
