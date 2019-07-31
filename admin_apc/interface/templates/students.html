@@ -102,11 +102,11 @@
                 </div><!--//doc-content-->
                 <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
                         <div id="doc-nav" class="doc-nav">
-                                <nav id="doc-menu" class="nav doc-menu flex-column sticky">
-                                    {% for student in students %}
-                                    <a class="nav-link scrollto" href="#{{ student.ID }}">Aluno: {{ student.firstname }} {{ student.lastname }}</a>
-                                    {% endfor %}
-                                </nav><!--//doc-menu-->
+                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                                {% for student in students %}
+                                <a class="nav-link scrollto" href="#{{ student.ID }}">Aluno: {{ student.firstname }} {{ student.lastname }}</a>
+                                {% endfor %}
+                            </nav><!--//doc-menu-->
                         </div>
                     </div><!--//doc-sidebar-->
             </div><!--//doc-body--> 
