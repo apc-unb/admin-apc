@@ -27,6 +27,7 @@ urlpatterns = [
     path('classes/', views.classes, name='url_classes'),
     path('create_class/', views.create_class, name='create_class'),
     path('update_class/', views.update_class, name='update_class'),
+    path('choose_news/', views.choose_news, name='choose_news'),
     path('news/', views.news, name='url_news'),
     path('create_new/', views.create_new, name='create_new'),
     path('update_new/', views.update_new, name='update_new'),

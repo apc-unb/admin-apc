@@ -54,6 +54,7 @@ def students(request):
 def create_student(request):
     if request.method == "POST":
         new_student = {}
+        data["ClassID"] = request.POST.get("ClassID")
         new_student["firstname"] = request.POST.get("firstname")
         new_student["lastname"] = request.POST.get("lastname")
         new_student["matricula"] = request.POST.get("matricula")
@@ -61,17 +62,17 @@ def create_student(request):
         requests.post('http://127.0.0.1:8080/students', data="[" + json.dumps(new_student) + "]")
     
     
-    return choose_students(request)
+    return students(request)
 
 def update_student(request):
     if request.method == 'POST':
         update_student = {}
-
+        data["ClassID"] = request.POST.get("ClassID")
         if(request.POST.get("delete") == "on"):
             update_student["ID"] = request.POST.get("ID")
             requests.delete('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")  
         
-        else: 
+        else:
             update_student["StudentID"] = request.POST.get("ID")
             update_student["ClassID"] = request.POST.get("ClassID")
             if request.POST.get("firstname") != "":
@@ -103,7 +104,7 @@ def update_student(request):
             print(update_student)
             requests.put('http://127.0.0.1:8080/admin/student', data=json.dumps(update_student))
 
-    return choose_students(request)
+    return students(request)
 
 def classes(request):
     
@@ -152,10 +153,44 @@ def update_class(request):
 
     return classes(request)
 
+def choose_news(request):
+    
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
+    r = s.get('http://127.0.0.1:8080/news')
+    data["news"] = r.json()
+    data["years"] = []
+    data["seasons"] = []
+    data["classnames"] = []
+    for classe in data["classes"]:
+        if classe["year"] not in data["years"]:
+            data["years"].append(classe["year"])
+
+        if classe["season"] not in data["seasons"]:
+            data["seasons"].append(classe["season"])
+
+        if classe["classname"] not in data["classnames"]:
+            data["classnames"].append(classe["classname"])
+    
+    year = request.POST.get("year")
+    if request.method == 'POST' and year != None :
+        key = 0
+        season = request.POST.get("season")
+        classname = request.POST.get("classname")
+        for classe in data["classes"]:
+            if (int(year) == classe["year"]):
+                if (int(season) == classe["season"]):
+                    if classname == classe["classname"]:
+                        key = classe["ID"]
+        data["ClassID"] = key
+        return news(request)
+    return render(request, 'choose_news.html', data)
+
 def news(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/news')
+    r = s.get('http://127.0.0.1:8080/news/' + data["ClassID"])
     data["news"] = r.json()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()
@@ -164,6 +199,7 @@ def news(request):
 def create_new(request):
     if request.method == 'POST':
         new_new = {}
+        data["ClassID"] = request.POST.get("ClassID")
         new_new["classid"] = request.POST.get("ClassID")
         new_new["title"] = request.POST.get("title")
         new_new["description"] = request.POST.get("description")
@@ -176,6 +212,7 @@ def update_new(request):
     if request.method == 'POST':
         update_new = {}
         update_new["ID"] = request.POST.get("ID")
+        data["ClassID"] = request.POST.get("ClassID")
 
         if(request.POST.get("delete") == "on"):
             requests.delete('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")

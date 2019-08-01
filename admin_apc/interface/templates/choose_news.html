@@ -3,7 +3,7 @@
     <title>CRUD ALUNO</title>
 {% endblock %}
 {% block content %}
-<li class="breadcrumb-item active"><a href="{% url 'choose_news' %}">Notícias</a></li>
+<li class="breadcrumb-item active">Notícias</li>
 </ol>
 </div><!--//container-->
 </header><!--//header-->
@@ -28,11 +28,33 @@
                         Turma: <br>
                         <select class="form-control" name="ClassID">
                             {% for class in classes %}
-                            {% if ClassID == class.ID %}
-                                <option value="{{class.ID}}" selected>{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
-                            {% else %}
                                 <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
-                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <br><br>
+                        <input type="submit" class="btn btn-green" value="Concluido">
+                    </form>
+                </div>
+                <button onclick="show('form_2')" class="btn btn-green" >Listar Notícias</button>
+                <div class="center hideform" id="form_2">
+                    <form action= "{% url 'choose_news' %}" method="POST">
+                        {% csrf_token %}
+                        Ano:<br>
+                        <select class="form-control" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                        </select>
+                        Período:<br>
+                        <select class="form-control" name="season">
+                        {% for season in seasons %}
+                            <option value="{{ season }}">{{ season }}</option>
+                        {% endfor %}
+                        </select>
+                        Turma:<br>
+                        <select class="form-control" name="classname">
+                        {% for classname in classnames %}
+                            <option value="{{ classname}}">{{ classname }}</option>
                         {% endfor %}
                         </select>
                         <br><br>

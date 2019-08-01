@@ -12,8 +12,8 @@
             <div id="doc-header" class="doc-header text-center">
                 <h1 class="doc-title"><span aria-hidden="true" class="icon fa fa-address-card"></span> Alunos</h1>
                 <br>
-                <button onclick="show('form_1')" class="btn btn-green" >Cadastrar Aluno</button>
-                <div class="center hideform" id="form_1">
+                <button onclick="show('form')" class="btn btn-green" >Cadastrar Aluno</button>
+                <div class="center hideform" id="form">
                     <form action= "{% url 'create_student' %}" method="POST">
                         {% csrf_token %}
                         First Name: <br>
