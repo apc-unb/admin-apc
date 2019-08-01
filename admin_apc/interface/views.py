@@ -281,6 +281,8 @@ def exams(request):
 def create_exam(request):
     if request.method == 'POST':
         new_exam = {}
+        data["ClassID"] = request.POST.get("ClassID")
+
         new_exam["classid"] = request.POST.get("ClassID")
         new_exam["title"] = request.POST.get("title")
         
@@ -291,6 +293,7 @@ def update_exam(request):
     if request.method == 'POST':
         update_exam = {}
         update_exam["ID"] = request.POST.get("ID")
+        data["ClassID"] = request.POST.get("ClassID")
 
         if(request.POST.get("delete") == "on"):
             requests.delete('http://127.0.0.1:8080/exams', data="[" + json.dumps(update_exam) + "]")
