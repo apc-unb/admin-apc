@@ -230,12 +230,49 @@ def update_new(request):
 
     return news(request)
 
-def exams(request):
+def choose_exams(request):
     
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()
     r = s.get('http://127.0.0.1:8080/exams')
+    data["exams"] = r.json()
+    r = s.get('http://127.0.0.1:8080/tasks')
+    data["tasks"] = r.json()
+
+    data["years"] = []
+    data["seasons"] = []
+    data["classnames"] = []
+    for classe in data["classes"]:
+        if classe["year"] not in data["years"]:
+            data["years"].append(classe["year"])
+
+        if classe["season"] not in data["seasons"]:
+            data["seasons"].append(classe["season"])
+
+        if classe["classname"] not in data["classnames"]:
+            data["classnames"].append(classe["classname"])
+    
+    year = request.POST.get("year")
+    if request.method == 'POST' and year != None :
+        key = 0
+        season = request.POST.get("season")
+        classname = request.POST.get("classname")
+        for classe in data["classes"]:
+            if (int(year) == classe["year"]):
+                if (int(season) == classe["season"]):
+                    if classname == classe["classname"]:
+                        key = classe["ID"]
+        data["ClassID"] = key
+        return exams(request)
+    return render(request, 'choose_exams.html', data)
+
+def exams(request):
+    
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
+    r = s.get('http://127.0.0.1:8080/exams/' + data["ClassID"])
     data["exams"] = r.json()
     r = s.get('http://127.0.0.1:8080/tasks')
     data["tasks"] = r.json()

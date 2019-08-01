@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block header %}
-    <title>CRUD ALUNO</title>
+    <title>Notícias</title>
 {% endblock %}
 {% block content %}
 <li class="breadcrumb-item active"><a href="{% url 'choose_news' %}">Notícias</a></li>
@@ -27,7 +27,7 @@
                         <br>
                         Turma: <br>
                         <select class="form-control" name="ClassID">
-                            {% for class in classes %}
+                        {% for class in classes %}
                             {% if ClassID == class.ID %}
                                 <option value="{{class.ID}}" selected>{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                             {% else %}
