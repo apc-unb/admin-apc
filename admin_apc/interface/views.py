@@ -2,14 +2,49 @@ from django.shortcuts import render
 import requests
 import json
 
+data = {}
 # Create your views here.
 def index(request):
     return render(request, 'index.html', {})
 
-def students(request):
-    data = {}
+def choose_students(request):
+    
     s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/classes')
+    data["classes"] = r.json()
     r = s.get('http://127.0.0.1:8080/students')
+    data["students"] = r.json()
+    data["years"] = []
+    data["seasons"] = []
+    data["classnames"] = []
+    for classe in data["classes"]:
+        if classe["year"] not in data["years"]:
+            data["years"].append(classe["year"])
+
+        if classe["season"] not in data["seasons"]:
+            data["seasons"].append(classe["season"])
+
+        if classe["classname"] not in data["classnames"]:
+            data["classnames"].append(classe["classname"])
+    
+    year = request.POST.get("year")
+    if request.method == 'POST' and year != None :
+        key = 0
+        season = request.POST.get("season")
+        classname = request.POST.get("classname")
+        for classe in data["classes"]:
+            if (int(year) == classe["year"]):
+                if (int(season) == classe["season"]):
+                    if classname == classe["classname"]:
+                        key = classe["ID"]
+        data["ClassID"] = key
+        return students(request)
+    return render(request, 'choose_students.html', data)
+
+def students(request):
+    
+    s = requests.Session()
+    r = s.get('http://127.0.0.1:8080/students/' + data["ClassID"])
     data["students"] = r.json()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()
@@ -26,7 +61,7 @@ def create_student(request):
         requests.post('http://127.0.0.1:8080/students', data="[" + json.dumps(new_student) + "]")
     
     
-    return students(request)
+    return choose_students(request)
 
 def update_student(request):
     if request.method == 'POST':
@@ -68,10 +103,10 @@ def update_student(request):
             print(update_student)
             requests.put('http://127.0.0.1:8080/admin/student', data=json.dumps(update_student))
 
-    return students(request)
+    return choose_students(request)
 
 def classes(request):
-    data = {}
+    
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()
@@ -118,7 +153,7 @@ def update_class(request):
     return classes(request)
 
 def news(request):
-    data = {}
+    
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/news')
     data["news"] = r.json()
@@ -159,7 +194,7 @@ def update_new(request):
     return news(request)
 
 def exams(request):
-    data = {}
+    
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/classes')
     data["classes"] = r.json()

@@ -16,18 +16,19 @@
                 <div class="center hideform" id="form">
                     <form action= "{% url 'create_new' %}" method="POST">
                         {% csrf_token %}
-                        Title: <br>
+                        Título: <br>
                         <input type="text" class="form-control" name="title">
                         <br>
-                        Description: <br>
+                        Descrição: <br>
                         <textarea name="description" class="form-control" cols="40" rows="5"></textarea>
                         <br>
                         Tags: (separadas por hashtag) <br>
                         <textarea name="tags" class="form-control" cols="40" rows="5" placeholder="encerramento#calor#quente#frio"></textarea>
                         <br>
+                        Turma: <br>
                         <select class="form-control" name="ClassID">
                             {% for class in classes %}
-                                <option value="{{class.ID}}">{{ class.classname }}</option>
+                                <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                             {% endfor %}
                         </select>
                         <br><br>
@@ -40,14 +41,14 @@
                         <div class="content-inner">
             {% for new in news %}
                     <section id="{{ new.ID }}" class="doc-section">
-                        <h2 class="section-title">Título: {{ new.title }}</h2>
+                        <h2 class="section-title">{{ new.title }}</h2>
                         <div class="section-block">
-                            <p> Description: {{ new.description }}
-                            <br> Tags: {% for tag in new.tags %}{{ tag }} / {% endfor %}
+                            <p> {{ new.description }}
+                            <br><br>Tags: {% for tag in new.tags %}{{ tag }} / {% endfor %}
                             <br> Turma: 
                                 {% for class in classes %}
                                     {% if new.ClassID == class.ID %}
-                                            {{ class.classname }}
+                                    {{ class.classname }} - {{ class.year }}/{{ class.season }}
                                     {% endif %}
                                 {% endfor %}
                             </p>
@@ -56,19 +57,19 @@
                             <form action="{% url 'update_new' %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="ID" value="{{ new.ID }}">
-                                Title:<br>
+                                Título:<br>
                                 <input type="text" class="form-control" name="title" placeholder="{{ new.title }}">
                                 <br>
-                                Description:<br>
+                                Descrição:<br>
                                 <textarea name="description" class="form-control" cols="40" rows="5" placeholder="{{ new.description }}"></textarea>
                                 <br>
                                 Turma:<br>
                                 <select class="form-control" name="ClassID">
                                 {% for class in classes %}
                                     {% if new.ClassID == class.ID %}
-                                        <option value="{{class.ID}}" selected>{{ class.classname }}</option>
+                                        <option value="{{class.ID}}" selected>{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                                     {% else %}
-                                        <option value="{{class.ID}}">{{ class.classname }}</option>
+                                        <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                                     {% endif %}
                                 {% endfor %}
                                 </select>
@@ -90,7 +91,7 @@
            
                             <nav id="doc-menu" class="nav doc-menu flex-column sticky">
                                 {% for new in news %}
-                                <a class="nav-link scrollto" href="#{{ new.ID }}">Título: {{ new.title }}</a>
+                                <a class="nav-link scrollto" href="#{{ new.ID }}">{{ new.title }}</a>
                                 {% endfor %}
                             </nav><!--//doc-menu-->
                         

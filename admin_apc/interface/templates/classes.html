@@ -16,22 +16,22 @@
                 <div class="center hideform" id="form">
                     <form action= "{% url 'create_class' %}" method="POST">
                         {% csrf_token %}
-                        Professor First Name: <br>
+                        Primeiro nome do professor: <br>
                         <input type="text" class="form-control" name="professorfirstname">
                         <br>
-                        Professor Last Name: <br>
+                        Último nome do professor: <br>
                         <input type="text" class="form-control" name="professorlastname">
                         <br>
-                        Adress:<br>
+                        Local:<br>
                         <input type="text" class="form-control" name="address">
                         <br>
-                        Year:<br>
+                        Ano:<br>
                         <input type="number" class="form-control" min="2018" name="year">
                         <br>
-                        Season:<br>
+                        Período:<br>
                         <input type="number" class="form-control" min="1" max="2" name="season">
                         <br>
-                        Class Name:<br>
+                        Turma:<br>
                         <input type="text" class="form-control" name="classname">
                         <br><br>
                         <input type="submit" class="btn btn-green" value="Concluido">
@@ -54,22 +54,22 @@
                                     <form action="{% url 'update_class' %}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="ID" value="{{ class.ID }}">
-                                        Professor First name:<br>
+                                        Primeiro nome do professor:<br>
                                         <input type="text" name="professorfirstname" class="form-control" placeholder="{{ class.professorfirstname }}">
                                         <br>
-                                        Professor Last name:<br>
+                                        Último nome do professor: <br>
                                         <input type="text" name="professorlastname" class="form-control" placeholder="{{ class.professorlastname }}">
                                         <br>
-                                        Adress:<br>
+                                        Local:<br>
                                         <input type="text" name="address" class="form-control" placeholder="{{ class.address }}">
                                         <br>
-                                        Year:<br>
+                                        Ano:<br>
                                         <input type="number" min="2018" name="year" class="form-control" placeholder="{{ class.year }}">
                                         <br>
-                                        Season:<br>
+                                        Período:<br>
                                         <input type="number" min="1" max="2" name="season" class="form-control" placeholder="{{ class.season }}">
                                         <br>
-                                        Class Name:<br>
+                                        Turma:<br>
                                         <input type="text" name="classname" class="form-control" placeholder="{{ class.classname }}">
                                         <br>
                                         <br><br>
@@ -88,7 +88,7 @@
                        
                                         <nav id="doc-menu" class="nav doc-menu flex-column sticky">
                                             {% for class in classes %}
-                                            <a class="nav-link scrollto" href="#{{ class.ID }}">Turma: {{ class.classname }}</a>
+                                            <a class="nav-link scrollto" href="#{{ class.ID }}">Turma: {{ class.classname }} - {{ class.year }}/{{ class.season }} </a>
                                             {% endfor %}
                                         </nav><!--//doc-menu-->
                                     

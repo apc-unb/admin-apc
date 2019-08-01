@@ -16,12 +16,13 @@
             <div class="center hideform" id="form_1">
                 <form action= "{% url 'create_exam' %}" method="POST">
                     {% csrf_token %}
-                    Title: <br>
+                    Título: <br>
                     <input class="form-control" type="text" name="title">
                     <br>
+                    Turma: <br>
                     <select class="form-control" name="ClassID">
                         {% for class in classes %}
-                            <option value="{{class.ID}}">{{ class.classname }}</option>
+                        <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>                            
                         {% endfor %}
                     </select>
                     <br><br>
@@ -32,17 +33,17 @@
             <div class="center hideform" id="form_2">
                 <form action= "{% url 'create_task' %}" method="POST">
                     {% csrf_token %}
-                    Title: <br>
+                    Título: <br>
                     <input class="form-control" type="text" name="title">
                     <br>
-                    Statement: <br>
+                    Descrição: <br>
                     <textarea class="form-control" name="statement" cols="40" rows="5"></textarea>
                     <br>
-                    Score: <br>
+                    Pontuação: <br>
                     <input class="form-control" type="number" step="0.01" min="0" name="score">
                     <br>
                     Tags: (separadas por hashtag) <br>
-                    <textarea class="form-control" name="tags" cols="40" rows="5" placeholder="encerramento#calor#quente#frio"></textarea>
+                    <textarea class="form-control" name="tags" cols="40" rows="5" placeholder="array#sort#quicksort#mergesort"></textarea>
                     <br>
                     <select class="form-control" name="ExamID">
                         {% for exam in exams %}
@@ -59,10 +60,10 @@
                             <div class="content-inner">
                             {% for exam in exams %}
                             <section id="{{ exam.ID }}" class="doc-section">
-                                <h2 class="section-title">Title: {{ exam.title }} - Turma: 
+                                <h2 class="section-title">{{ exam.title }} - Turma: 
                                         {% for class in classes %}
                                             {% if exam.ClassID == class.ID %}
-                                                    {{ class.classname }}
+                                            {{ class.classname }} - {{ class.year }}/{{ class.season }}
                                             {% endif %}
                                         {% endfor %}
                                 </h2>
@@ -72,16 +73,16 @@
                                             <form action="{% url 'update_exam' %}" method="POST">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="ID" value="{{ exam.ID }}">
-                                                    Title:<br>
+                                                    Título:<br>
                                                     <input class="form-control" type="text" name="title" placeholder="{{ exam.title }}">
                                                     <br>
                                                     Turma:<br>
                                                     <select class="form-control" name="ClassID">
                                                     {% for class in classes %}
                                                         {% if exam.ClassID == class.ID %}
-                                                            <option value="{{class.ID}}" selected>{{ class.classname }}</option>
+                                                            <option value="{{class.ID}}" selected>{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                                                         {% else %}
-                                                            <option value="{{class.ID}}">{{ class.classname }}</option>
+                                                            <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
                                                         {% endif %}
                                                     {% endfor %}
                                                     </select>
@@ -97,7 +98,7 @@
                                     <div id="{{ task.ID }}"  class="section-block">
                                         <h3 class="block-title">{{ task.title }}</h3>
                                         <p>{{ task.statement }}
-                                            <br> <b>Score:</b> {{ task.score }}
+                                            <br> <br> <b>Pontuação:</b> {{ task.score }}
                                             <br> <b>Tags: </b>{% for tag in task.tags %}{{ tag }} / {% endfor %}
                                         </p>
                                         <button class="btn btn-blue" onclick="show('form{{ forloop.counter }}2')">Editar</button>
@@ -105,13 +106,13 @@
                                         <form action="{% url 'update_task' %}" method="POST">
                                             {% csrf_token %}
                                             <input type="hidden" name="ID" value="{{ task.ID }}">
-                                            Title:<br>
+                                            Título:<br>
                                             <input type="text" class="form-control" name="title" placeholder="{{ task.title }}">
                                             <br>
-                                            Statement:<br>
+                                            Descrição:<br>
                                             <textarea class="form-control" name="statement" placeholder="{{ task.statement }}" cols="40" rows="5"></textarea>            
                                             <br>
-                                            Score: <br>
+                                            Pontuação: <br>
                                             <input type="number" step="0.01" min="0" name="score" placeholder="{{ task.score }}">
                                             <br>
                                             Tags: <br>
@@ -143,7 +144,12 @@
                             <div id="doc-nav" class="doc-nav">
                                     <nav id="doc-menu" class="nav doc-menu flex-column sticky">
                                         {% for exam in exams %}
-                                        <a class="nav-link scrollto" href="#{{ exam.ID }}">Title: {{ exam.title }}</a>
+                                        <a class="nav-link scrollto" href="#{{ exam.ID }}">{{ exam.title }} - Turma: 
+                                            {% for class in classes %}
+                                                {% if exam.ClassID == class.ID %}
+                                                {{ class.classname }} - {{ class.year }}/{{ class.season }}
+                                                {% endif %}
+                                            {% endfor %}</a>
                                         <nav class="doc-sub-menu nav flex-column">
                                                 {% for task in tasks %}
                                                 {% if task.ExamID == exam.ID %}
