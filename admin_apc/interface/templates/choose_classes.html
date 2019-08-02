@@ -14,6 +14,7 @@
                 <br>
                 <button onclick="show('form')" class="btn btn-green">Cadastrar Turma</button>
                 <div class="center hideform" id="form">
+                        <button onclick="show('form')" style="float:right " class="btn btn-green">X</button><br><br>
                     <form action= "{% url 'create_class' %}" method="POST">
                         {% csrf_token %}
                         Primeiro nome do professor: <br>
@@ -37,8 +38,9 @@
                         <input type="submit" class="btn btn-green" value="Concluido">
                     </form>
                 </div><!--//form-->
-                <button onclick="show('form_3')" class="btn btn-green" >Listar Provas</button>
-                <div class="center hideform" id="form_3">
+                <button onclick="show('form_1')" class="btn btn-green" >Listar Provas</button>
+                <div class="center hideform" id="form_1">
+                        <button onclick="show('form_1')" style="float:right " class="btn btn-green">X</button><br><br>
                     <form action= "{% url 'choose_classes' %}" method="POST">
                         {% csrf_token %}
                         Ano:<br>
@@ -71,6 +73,7 @@
                                     </p>
                                     <button onclick="show('form{{ forloop.counter }}')" class="btn btn-green">Editar</button>
                                     <div class="center hideform" id="form{{ forloop.counter }}">
+                                            <button onclick="show('form{{ forloop.counter }}')" style="float:right " class="btn btn-green">X</button><br><br>
                                     <form action="{% url 'update_class' %}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="ID" value="{{ class.ID }}">

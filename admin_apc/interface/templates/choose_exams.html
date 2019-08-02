@@ -14,6 +14,7 @@
             <br>
             <button class="btn btn-green" onclick="show('form_1')">Cadastrar Prova</button>
             <div class="center hideform" id="form_1">
+                    <button onclick="show('form_1')" style="float:right " class="btn btn-green">X</button><br><br>
                 <form action= "{% url 'create_exam' %}" method="POST">
                     {% csrf_token %}
                     Título: <br>
@@ -31,6 +32,7 @@
             </div>
             <button class="btn btn-green" onclick="show('form_2')">Cadastrar Questão</button>
             <div class="center hideform" id="form_2">
+                    <button onclick="show('form_2')" style="float:right " class="btn btn-green">X</button><br><br>
                 <form action= "{% url 'create_task' %}" method="POST">
                     {% csrf_token %}
                     Título: <br>
@@ -56,6 +58,7 @@
             </div>
             <button onclick="show('form_3')" class="btn btn-green" >Listar Provas</button>
                 <div class="center hideform" id="form_3">
+                        <button onclick="show('form_3')" style="float:right " class="btn btn-green">X</button><br><br>
                     <form action= "{% url 'choose_exams' %}" method="POST">
                         {% csrf_token %}
                         Ano:<br>
@@ -96,6 +99,7 @@
                                 <div class="section-block">
                                     <button onclick="show('form{{ forloop.counter }}')" class="btn btn-green">Editar</button>
                                     <div class="center hideform" id="form{{ forloop.counter }}">
+                                            <button onclick="show('form{{ forloop.counter }}')" style="float:right " class="btn btn-green">X</button><br><br>
                                             <form action="{% url 'update_exam' %}" method="POST">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="ID" value="{{ exam.ID }}">
@@ -129,6 +133,7 @@
                                         </p>
                                         <button class="btn btn-blue" onclick="show('form{{ forloop.counter }}2')">Editar</button>
                                     <div class="center hideform" id="form{{ forloop.counter }}2">
+                                            <button onclick="show('form{{ forloop.counter}}2')" style="float:right " class="btn btn-green">X</button><br><br>
                                         <form action="{% url 'update_task' %}" method="POST">
                                             {% csrf_token %}
                                             <input type="hidden" name="ID" value="{{ task.ID }}">

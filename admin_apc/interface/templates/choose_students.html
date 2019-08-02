@@ -14,6 +14,7 @@
                 <br>
                 <button onclick="show('form')" class="btn btn-green" >Cadastrar Aluno</button>
                 <div class="center hideform" id="form">
+                        <button onclick="show('form')" style="float:right " class="btn btn-green">X</button><br><br>
                     <form action= "{% url 'create_student' %}" method="POST">
                         {% csrf_token %}
                         First Name: <br>
@@ -37,6 +38,7 @@
                 </div>
                 <button onclick="show('form_2')" class="btn btn-green" >Listar Alunos</button>
                 <div class="center hideform" id="form_2">
+                        <button onclick="show('form_2')" style="float:right " class="btn btn-green">X</button><br><br>
                     <form action= "{% url 'choose_students' %}" method="POST">
                         {% csrf_token %}
                         Ano:<br>
@@ -79,6 +81,7 @@
                             </p>
                             <button onclick="show('form{{ forloop.counter }}')" class="btn btn-green">Editar</button>
                             <div class="center hideform" id="form{{ forloop.counter }}">
+                                    <button onclick="show('form{{ forloop.counter }}')" style="float:right " class="btn btn-green">X</button><br><br>
                                 <form action="{% url 'update_student' %}" method="POST">
                                     {% csrf_token %}
                                     <input type="hidden" name="ID" value="{{ student.ID }}">
