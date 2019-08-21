@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% block header %}
     <title>Alunos</title>
+    <script src="{% static 'js/filter_chooses.js' %}"></script>
 {% endblock %}
 {% block content %}
 <li class="breadcrumb-item active">Alunos</li>
@@ -42,16 +44,18 @@
                     <form action= "{% url 'choose_students' %}" method="POST">
                         {% csrf_token %}
                         Ano:<br>
-                        <select class="form-control" name="year">
-                        {% for year in years %}
-                            <option value="{{ year }}">{{ year }}</option>
-                        {% endfor %}
+                        <select class="form-control" id="filtra-ano-listar" name="year" onchange="filter_period('filtra-ano-listar')">
+                                <option disable selected value>Selecione ano...</option>
+                                {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
                         </select>
                         Período:<br>
-                        <select class="form-control" name="season">
-                        {% for season in seasons %}
+                        <select class="form-control" name="season" id="filtra-periodo-listar">
+                            <option disable selected value>Selecione periodo...</option>
+                            {% for season in seasons %}
                             <option value="{{ season }}">{{ season }}</option>
-                        {% endfor %}
+                            {% endfor %}
                         </select>
                         Turma:<br>
                         <select class="form-control" name="classname">
