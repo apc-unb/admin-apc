@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends '../base.html' %}
 {% block header %}
     <title>Provas</title>
 {% endblock %}
@@ -23,7 +23,11 @@
                     Turma: <br>
                     <select class="form-control" name="ClassID">
                         {% for class in classes %}
-                        <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>                            
+                            {% if ClassID == class.ID %}
+                                <option value="{{class.ID}}" selected>{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
+                            {% else %}
+                                <option value="{{class.ID}}">{{ class.classname }} - {{ class.year }}/{{ class.season }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                     <br><br>
@@ -56,33 +60,6 @@
                     <input type="submit" class="btn btn-green" value="Concluido">
                 </form>
             </div>
-            <button onclick="show('form_3')" class="btn btn-green" >Listar Provas</button>
-                <div class="center hideform" id="form_3">
-                        <button onclick="show('form_3')" style="float:right " class="btn btn-green">X</button><br><br>
-                    <form action= "{% url 'choose_exams' %}" method="POST">
-                        {% csrf_token %}
-                        Ano:<br>
-                        <select class="form-control" name="year">
-                        {% for year in years %}
-                            <option value="{{ year }}">{{ year }}</option>
-                        {% endfor %}
-                        </select>
-                        Período:<br>
-                        <select class="form-control" name="season">
-                        {% for season in seasons %}
-                            <option value="{{ season }}">{{ season }}</option>
-                        {% endfor %}
-                        </select>
-                        Turma:<br>
-                        <select class="form-control" name="classname">
-                        {% for classname in classnames %}
-                            <option value="{{ classname}}">{{ classname }}</option>
-                        {% endfor %}
-                        </select>
-                        <br><br>
-                        <input type="submit" class="btn btn-green" value="Concluido">
-                    </form>
-                </div>
         </div><!--//doc-header-->
                 <div class="doc-body row">
                         <div class="doc-content col-md-9 col-12 order-1">
@@ -133,7 +110,7 @@
                                         </p>
                                         <button class="btn btn-blue" onclick="show('form{{ forloop.counter }}2')">Editar</button>
                                     <div class="center hideform" id="form{{ forloop.counter }}2">
-                                            <button onclick="show('form{{ forloop.counter}}2')" style="float:right " class="btn btn-green">X</button><br><br>
+                                            <button onclick="show('form{{ forloop.counter }}2')" style="float:right " class="btn btn-green">X</button><br><br>
                                         <form action="{% url 'update_task' %}" method="POST">
                                             {% csrf_token %}
                                             <input type="hidden" name="ID" value="{{ task.ID }}">
@@ -171,6 +148,27 @@
                             {% endfor %}
                         </div><!--//content-inner-->
                     </div><!--//doc-content-->
+                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                            <div id="doc-nav" class="doc-nav">
+                                    <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                                        {% for exam in exams %}
+                                        <a class="nav-link scrollto" href="#{{ exam.ID }}">{{ exam.title }} - Turma: 
+                                            {% for class in classes %}
+                                                {% if exam.ClassID == class.ID %}
+                                                {{ class.classname }} - {{ class.year }}/{{ class.season }}
+                                                {% endif %}
+                                            {% endfor %}</a>
+                                        <nav class="doc-sub-menu nav flex-column">
+                                                {% for task in tasks %}
+                                                {% if task.ExamID == exam.ID %}
+                                                <a class="nav-link scrollto" href="#{{ task.ID }}">{{ task.title }}</a>
+                                                {% endif %}
+                                                {% endfor %}
+                                        </nav><!--//nav-->
+                                        {% endfor %}
+                                    </nav><!--//doc-menu-->
+                            </div>
+                        </div><!--//doc-sidebar-->
                 </div><!--//doc-body-->  
         </div><!--//container-->
     </div><!--//doc-wrapper-->
