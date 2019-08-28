@@ -1,3 +1,4 @@
+from .base import CLASSES_URL, NEWS_URL
 from django.shortcuts import render
 import requests
 import json
@@ -8,9 +9,9 @@ data = {}
 def choose_news(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
-    r = s.get('http://127.0.0.1:8080/news')
+    r = s.get(NEWS_URL)
     data["news"] = r.json()
     data["years"] = []
     data["seasons"] = []
@@ -44,7 +45,7 @@ def news(request):
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/news/' + data["ClassID"])
     data["news"] = r.json()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
     return render(request, 'news/news.html', data)
 
@@ -57,7 +58,7 @@ def create_new(request):
         new_new["description"] = request.POST.get("description")
         new_new["tags"] = str(request.POST.get("tags")).split("#")
         
-        requests.post('http://127.0.0.1:8080/news', data="[" + json.dumps(new_new) + "]")
+        requests.post(NEWS_URL, data="[" + json.dumps(new_new) + "]")
     return news(request)
 
 def update_new(request):
@@ -67,7 +68,7 @@ def update_new(request):
         data["ClassID"] = request.POST.get("ClassID")
 
         if(request.POST.get("delete") == "on"):
-            requests.delete('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")
+            requests.delete(NEWS_URL, data="[" + json.dumps(update_new) + "]")
         
         else:
             if request.POST.get("ClassID") != "":
@@ -78,6 +79,6 @@ def update_new(request):
                 update_new["description"] = request.POST.get("description")
             if request.POST.get("tags") != "":
                 update_new["tags"] = str(request.POST.get("tags")).split("#")
-            requests.put('http://127.0.0.1:8080/news', data="[" + json.dumps(update_new) + "]")
+            requests.put(NEWS_URL, data="[" + json.dumps(update_new) + "]")
 
     return news(request)

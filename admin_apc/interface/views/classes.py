@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .base import CLASSES_URL
 import requests
 import json
 
@@ -7,7 +8,7 @@ data = {}
 
 def choose_classes(request):
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
     data["years"] = []
     data["seasons"] = []
@@ -30,7 +31,7 @@ def choose_classes(request):
 def classes(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
     data["choose_classes"] = []
     for classe in data["classes"]:
@@ -48,7 +49,7 @@ def create_class(request):
         new_class["year"] = int(request.POST.get("year"))
         new_class["season"] = int(request.POST.get("season"))
         
-        requests.post('http://127.0.0.1:8080/classes', data="[" + json.dumps(new_class) + "]")
+        requests.post(CLASSES_URL, data="[" + json.dumps(new_class) + "]")
 
     return choose_classes(request)
 
@@ -58,7 +59,7 @@ def update_class(request):
         update_class["ID"] = request.POST.get("ID")
 
         if(request.POST.get("delete") == "on"):
-            requests.delete('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
+            requests.delete(CLASSES_URL, data="[" + json.dumps(update_class) + "]")
 
         else:
             if request.POST.get("professorfirstname") != "":
@@ -74,6 +75,6 @@ def update_class(request):
             if request.POST.get("season") != "":
                 update_class["season"] = int(request.POST.get("season"))
 
-            requests.put('http://127.0.0.1:8080/classes', data="[" + json.dumps(update_class) + "]")
+            requests.put(CLASSES_URL, data="[" + json.dumps(update_class) + "]")
 
     return choose_classes(request)

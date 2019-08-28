@@ -1,3 +1,4 @@
+from .base import CLASSES_URL, STUDENTS_URL
 from django.shortcuts import render
 import requests
 import json
@@ -8,9 +9,9 @@ data = {}
 def choose_students(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
-    r = s.get('http://127.0.0.1:8080/students')
+    r = s.get(STUDENTS_URL)
     data["students"] = r.json()
     data["years"] = []
     data["seasons"] = []
@@ -44,7 +45,7 @@ def students(request):
     s = requests.Session()
     r = s.get('http://127.0.0.1:8080/students/' + data["ClassID"])
     data["students"] = r.json()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
 
     return render(request, 'students/students.html', data)
@@ -57,7 +58,7 @@ def create_student(request):
         new_student["lastname"] = request.POST.get("lastname")
         new_student["matricula"] = request.POST.get("matricula")
         new_student["ClassID"] = request.POST.get("ClassID")
-        requests.post('http://127.0.0.1:8080/students', data="[" + json.dumps(new_student) + "]")
+        requests.post(STUDENTS_URL, data="[" + json.dumps(new_student) + "]")
     
     
     return students(request)
@@ -68,7 +69,7 @@ def update_student(request):
         data["ClassID"] = request.POST.get("ClassID")
         if(request.POST.get("delete") == "on"):
             update_student["ID"] = request.POST.get("ID")
-            requests.delete('http://127.0.0.1:8080/students', data="[" + json.dumps(update_student) + "]")  
+            requests.delete(STUDENTS_URL, data="[" + json.dumps(update_student) + "]")  
         
         else:
             update_student["StudentID"] = request.POST.get("ID")

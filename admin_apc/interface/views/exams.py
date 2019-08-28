@@ -1,3 +1,4 @@
+from .base import CLASSES_URL, EXAMS_URL, TASKS_URL
 from django.shortcuts import render
 import requests
 import json
@@ -8,11 +9,11 @@ data = {}
 def choose_exams(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
-    r = s.get('http://127.0.0.1:8080/exams')
+    r = s.get(EXAMS_URL)
     data["exams"] = r.json()
-    r = s.get('http://127.0.0.1:8080/tasks')
+    r = s.get(TASKS_URL)
     data["tasks"] = r.json()
 
     data["years"] = []
@@ -45,11 +46,11 @@ def choose_exams(request):
 def exams(request):
     
     s = requests.Session()
-    r = s.get('http://127.0.0.1:8080/classes')
+    r = s.get(CLASSES_URL)
     data["classes"] = r.json()
-    r = s.get('http://127.0.0.1:8080/exams/' + data["ClassID"])
+    r = s.get(EXAMS_URL + data["ClassID"])
     data["exams"] = r.json()
-    r = s.get('http://127.0.0.1:8080/tasks')
+    r = s.get(TASKS_URL)
     data["tasks"] = r.json()
     return render(request, 'exams/exams.html', data)
 
@@ -61,7 +62,7 @@ def create_exam(request):
         new_exam["classid"] = request.POST.get("ClassID")
         new_exam["title"] = request.POST.get("title")
         
-        requests.post('http://127.0.0.1:8080/exams', data="[" + json.dumps(new_exam) + "]")
+        requests.post(EXAMS_URL, data="[" + json.dumps(new_exam) + "]")
     return exams(request)
 
 def update_exam(request):
@@ -71,14 +72,14 @@ def update_exam(request):
         data["ClassID"] = request.POST.get("ClassID")
 
         if(request.POST.get("delete") == "on"):
-            requests.delete('http://127.0.0.1:8080/exams', data="[" + json.dumps(update_exam) + "]")
+            requests.delete(EXAMS_URL, data="[" + json.dumps(update_exam) + "]")
         
         else:
             if request.POST.get("ClassID") != "":
                 update_exam["classid"] = request.POST.get("ClassID")
             if request.POST.get("title") != "":
                 update_exam["title"] = request.POST.get("title")
-            requests.put('http://127.0.0.1:8080/exams', data="[" + json.dumps(update_exam) + "]")
+            requests.put(EXAMS_URL, data="[" + json.dumps(update_exam) + "]")
     
     return exams(request)
 
@@ -91,7 +92,7 @@ def create_task(request):
         new_task["score"] = float(request.POST.get("score"))
         new_task["tags"] = str(request.POST.get("tags")).split("#")
         
-        requests.post('http://127.0.0.1:8080/tasks', data="[" + json.dumps(new_task) + "]")
+        requests.post(TASKS_URL, data="[" + json.dumps(new_task) + "]")
     
     return exams(request)
 
@@ -101,7 +102,7 @@ def update_task(request):
         update_task["ID"] = request.POST.get("ID")
 
         if(request.POST.get("delete") == "on"):
-            requests.delete('http://127.0.0.1:8080/tasks', data="[" + json.dumps(update_task) + "]")
+            requests.delete(TASKS_URL, data="[" + json.dumps(update_task) + "]")
         
         else:
             if request.POST.get("ExamID") != "":
@@ -115,6 +116,6 @@ def update_task(request):
             if request.POST.get("tags") != "":
                 update_task["tags"] = str(request.POST.get("tags")).split("#")
 
-            requests.put('http://127.0.0.1:8080/tasks', data="[" + json.dumps(update_task) + "]")
+            requests.put(TASKS_URL, data="[" + json.dumps(update_task) + "]")
 
     return exams(request)
